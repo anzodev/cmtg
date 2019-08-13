@@ -23,7 +23,7 @@ def index():
     )
 
 
-def stream_wixel_sessions(wxl_session_map: structures.WixelSessionMap):
+def stream_sessions(wxl_session_map: structures.WixelSessionMap):
     @web_utils.sse_response()
     def _stream():
         while True:

@@ -3,8 +3,6 @@ import logging
 import threading
 from typing import Optional
 
-import serial as pyserial
-
 from cmtg import structures, wixel
 
 
@@ -31,7 +29,7 @@ class TerminatedThread(threading.Thread):
     def terminate(self) -> None:
         self._event_term.set()
 
-    def wait_term(self, timeout: Optional[float] = None):
+    def wait_term(self, timeout: Optional[float] = None) -> None:
         self._event_term.wait(timeout)
 
 
@@ -47,8 +45,14 @@ class SignalCollector(TerminatedThread):
     def run(self, logger: logging.Logger):
         while not self.is_terminated:
             try:
-                if not self.wxl.serial.is_open:
-                    self.wxl.serial.open()
+                with self.wxl.serial:
+                    while not self.is_terminated:
+                        signal_values = self.wxl.get_signal_values()
+                        if not signal_values:
+                            logger.warning(f"the package is corrupted;")
+                            continue
+                        self.signal.append(signal_values)
+
             except OSError as e:
                 if e.errno == errno.EBUSY:
                     logger.warning(
@@ -56,30 +60,12 @@ class SignalCollector(TerminatedThread):
                     )
                     self.wait_term(4.0)
                     continue
-                else:
-                    logger.error(f'serial open error ("{str(e)}");')
-                    return
-            except Exception as e:
-                logger.error(f'serial open error ("{str(e)}");')
-                return
-            else:
+                logger.error(f'serial error ("{str(e)}");')
                 break
 
-        try:
-            with self.wxl.serial:
-                while not self.is_terminated:
-                    try:
-                        signal_values = self.wxl.get_signal_values()
-                    except (pyserial.SerialException, IOError) as e:
-                        logger.error(f'serial read error ("{str(e)}");')
-                        break
-
-                    if not signal_values:
-                        logger.warning(f"the package is corrupted;")
-                        continue
-                    self.signal.append(signal_values)
-        except Exception as e:
-            logger.error(f'serial error ("{str(e)}");')
+            except Exception as e:
+                logger.error(f'serial error ("{str(e)}");')
+                break
 
 
 class SignalCollectorMonitor(TerminatedThread):

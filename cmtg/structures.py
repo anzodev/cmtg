@@ -103,7 +103,7 @@ class LogBuffer:
         self._tick = 0
 
     @property
-    def tick(self):
+    def tick(self) -> int:
         return self._tick
 
     def update(self) -> None:

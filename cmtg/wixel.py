@@ -21,7 +21,7 @@ class Wixel:
         self._ser.port = device
 
     @property
-    def serial_number(self):
+    def serial_number(self) -> str:
         return self._serial_number
 
     @property
@@ -29,7 +29,7 @@ class Wixel:
         return self._ser
 
     @property
-    def device(self):
+    def device(self) -> str:
         return self._ser.port
 
     def get_signal_values(self, timeout: float = 1.5) -> Optional[List[int]]:

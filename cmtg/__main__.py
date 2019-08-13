@@ -15,10 +15,10 @@ from cmtg import structures, utils, web, wixel_utils, workers
 
 parser = argparse.ArgumentParser(
     prog="cmtg",
-    description="Pololu Wixel spectrum analysis (monitoring system).",
+    description="Pololu Wixel Spectrum Analysis (monitoring system).",
 )
 parser.add_argument(
-    "--log-level",
+    "--log",
     metavar="string",
     type=str,
     default="INFO",
@@ -36,21 +36,18 @@ parser.add_argument(
     "--port", metavar="int", type=int, default=5000, help="web service port"
 )
 parser.add_argument(
-    "--mock-wxls",
+    "--wxls",
     metavar="int",
     type=int,
     default=0,
-    help="set mock Wixel connections",
-)
-parser.add_argument(
-    "-v", "--version", action="version", version="%(prog)s 1.0"
+    help="quantity of emulated Pololu Wixel connections",
 )
 args = parser.parse_args()
 
-log_level = args.log_level
+log_level = args.log
 host = args.host
 port = args.port
-mock_wxls = args.mock_wxls
+mock_wxls = args.wxls
 
 
 if mock_wxls > 0:
@@ -89,7 +86,7 @@ lbu.daemon = True
 web_app = web.create_app(wxl_session_map, log_buffer)
 
 
-def service_exit(*args):
+def app_exit(*args):
     global wsm, scm, lbu
     wsm.terminate()
     scm.terminate()
@@ -100,8 +97,8 @@ def service_exit(*args):
     exit()
 
 
-gevent.signal(signal.SIGTERM, service_exit)
-gevent.signal(signal.SIGINT, service_exit)
+gevent.signal(signal.SIGTERM, app_exit)
+gevent.signal(signal.SIGINT, app_exit)
 
 
 try:
@@ -119,5 +116,4 @@ except Exception:
         f"unexpected error occured ({repr(format_exc())}), service exit;"
     )
 
-finally:
-    exit()
+app_exit()

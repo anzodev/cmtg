@@ -18,18 +18,14 @@ def create_app(
     bottle.TEMPLATE_PATH.insert(0, PATH_VIEWS)
 
     app = bottle.Bottle()
-
-    app.route(path="/static/<filename:path>", callback=handlers.static)
-    app.route(path="/", callback=handlers.index)
-    app.route(
-        path="/stream/signal", callback=handlers.stream_signal(wxl_session_map)
-    )
-    app.route(
-        path="/stream/wxl_sessions",
-        callback=handlers.stream_wixel_sessions(wxl_session_map),
-    )
-    app.route(
-        path="/stream/logging", callback=handlers.stream_logging(log_buffer)
-    )
+    routes = [
+        ("/static/<filename:path>", handlers.static),
+        ("/", handlers.index),
+        ("/stream/signal", handlers.stream_signal(wxl_session_map)),
+        ("/stream/wxl_sessions", handlers.stream_sessions(wxl_session_map)),
+        ("/stream/logging", handlers.stream_logging(log_buffer)),
+    ]
+    for path, callback in routes:
+        app.route(path=path, callback=callback)
 
     return app

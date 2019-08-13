@@ -1,7 +1,10 @@
 (function () {
 
+    window.cmtg = {};
+
+
     // libs
-    window.colorHash = new ColorHash();
+    window.cmtg.colorHash = new ColorHash();
 
 
     // wixel module stuff
@@ -17,7 +20,8 @@
         }
         return result;
     }
-    window.wixelFrequencies = getWixelFrequencies();
+
+    window.cmtg.wixelFrequencies = getWixelFrequencies();
 
 
     // constants
@@ -25,13 +29,15 @@
     const chartTypeAvgLast10 = 2;
     const chartTypeAvgLast100 = 3;
     const chartTypeAvgAll = 4;
-    window.chartType = chartTypeLast;
 
-    const chartTypeTitles = {};
-    chartTypeTitles[chartTypeLast] = "Last signal values";
-    chartTypeTitles[chartTypeAvgLast10] = "Average of last 10 signal values";
-    chartTypeTitles[chartTypeAvgLast100] = "Average of last 100 signal values";
-    chartTypeTitles[chartTypeAvgAll] = "Average of all signal values";
+    window.cmtg.chartType = chartTypeLast;
+
+    const chartTypeTitles = {
+        chartTypeTitles[chartTypeLast]: "Last signal values",
+        chartTypeTitles[chartTypeAvgLast10]: "Average of last 10 signal values",
+        chartTypeTitles[chartTypeAvgLast100]: "Average of last 100 signal values",
+        chartTypeTitles[chartTypeAvgAll]: "Average of all signal values",
+    };
 
     const chartOptions = {
         animation: {
@@ -96,7 +102,7 @@
 
     // functional part
     function setChartType(chartType) {
-        window.chartType = chartType;
+        window.cmtg.chartType = chartType;
     }
 
     function setChartTitle(chartType) {
@@ -137,7 +143,7 @@
         for (serialNumber in signalMap) {
             let signalValues;
 
-            switch (window.chartType) {
+            switch (window.cmtg.chartType) {
                 case chartTypeLast:
                     signalValues = signalMap[serialNumber].last;
                     break
@@ -157,9 +163,9 @@
             }
 
             datasets.push({
-                borderColor: window.colorHash.hex(serialNumber),
+                borderColor: window.cmtg.colorHash.hex(serialNumber),
                 data: createChartPoints(
-                    window.wixelFrequencies, signalValues
+                    window.cmtg.wixelFrequencies, signalValues
                 )
             });
         }
@@ -169,7 +175,7 @@
     }
 
     function createWixelItem(wixelSession) {
-        let borderColor = window.colorHash.hex(wixelSession.serial_number);
+        let borderColor = window.cmtg.colorHash.hex(wixelSession.serial_number);
         return (
             `<li class="wixel-list__item">
                 <ul class="wixel" style="border-left-color: ${borderColor};">
@@ -232,18 +238,17 @@
 
 
     // inits
-    let chartCtx = document.getElementById('signal-chart').getContext('2d');
-    let signalChart = new Chart(chartCtx, {
-        type: 'line',
-        options: chartOptions,
-    });
+    let chartCtx = document.getElementById('signal-chart').getContext('2d'),
+        signalChart = new Chart(chartCtx, {
+            type: 'line',
+            options: chartOptions,
+        });
 
     let chartTogglers = document.getElementsByClassName("chart-toggler");
     for (let i = 0; i < chartTogglers.length; i++) {
         let toggler = chartTogglers[i];
         toggler.addEventListener("click", changeChartType);
     }
-
 
     let streamSignal = new EventSource('/stream/signal'),
         streamWixelSessions = new EventSource('/stream/wxl_sessions'),
@@ -252,11 +257,9 @@
     streamSignal.onmessage = function (event) {
         updateChartValues(signalChart, event.data);
     }
-
     streamWixelSessions.onmessage = function (event) {
         updateWixelSessions(event.data);
     }
-
     streamLogging.onmessage = function (event) {
         updateLogs(event.data);
     }

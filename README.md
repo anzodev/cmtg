@@ -3,7 +3,7 @@
 The signal level monitoring system, that uses programmable modules [Pololu Wixel](https://www.pololu.com/product/1336) for spectrum analysis. It was developed at context of the [research work](https://ieeexplore.ieee.org/document/8632151).
 > Note: the publication is based on the draft version of the monitoring system. However, it had the same concepts of realization.
 
-**cmtg** is [Python3.7+](https://docs.python.org/3/) application, that provides real-time signal level monitoring at range 2403.47–2476.50 MHz to improve Wi-Fi router work quality, by checking free channels. It's built by client-server architecture and has interactive Web UI.
+**cmtg** is [Python3.7+](https://docs.python.org/3/) application, that provides real-time signal level monitoring at range 2403.47–2476.50 MHz. For example, you can improve Wi-Fi router work quality, by checking free channels. It's built by client-server architecture and has interactive Web UI.
 The monitoring system was designed with attention to run it on the **single-board computers** like [Raspberry Pi](https://www.raspberrypi.org/).
 > Note: first two versions of the monitoring system: [COMonitoring](https://github.com/anzodev/COMonitoring), [COMonitoring2](https://github.com/anzodev/COMonitoring2).
 
@@ -23,7 +23,7 @@ $ sudo usermod -aG dialout $USER
 ```
 Otherwise, you should run monitoring system with **root permissions**.
 
-> Note: if you don't have Pololu Wixel modules, the monitoring supports functional, that emulates module's connection. So, you can check how monitoring system works without real modules. This is described at [run](#run) section.
+> Note: if you don't have Pololu Wixel modules, the monitoring system supports functional, that emulates module's connection. So, you can check how monitoring system works without real modules. This is described at [run](#run) section.
 
 
 ## [Startup with docker](#startup-with-docker)
@@ -40,7 +40,7 @@ $ cd cmtg
 $ docker build -t cmtg .
 ```
 
-After that, you will have docker image with *cmtg:latest* tag, but you can set your specific [tag](https://docs.docker.com/engine/reference/commandline/build/#tag-an-image--t).
+After that, you will have docker image with *cmtg:latest* tag, but you can set your specific [tag](https://docs.docker.com/engine/reference/commandline/build/#tag-an-image--t).  
 The monitoring system [run process](#run-docker-container) is described below.
 
 ## [Startup with Python virtual environment](#startup-with-python-virtual-environment)

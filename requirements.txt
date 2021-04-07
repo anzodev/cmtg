@@ -1,5 +1,5 @@
--i https://pypi.org/simple
-bottle==0.12.17
+-i https://pypi.org/simple/
+bottle==0.12.19
 gevent==1.4.0
-greenlet==0.4.15 ; platform_python_implementation == 'CPython'
+greenlet==1.0.0 ; platform_python_implementation == 'CPython'
 pyserial==3.4

@@ -9,6 +9,7 @@ The monitoring system was designed with attention to run it on the **single-boar
 
 ![cmtg Web UI](https://github.com/anzodev/cmtg/blob/media/web-interface.png)
 
+
 ## [Hardware](#hardware)
 
 The programmable module Pololu Wixel is based on the [CC2511F32](http://www.ti.com/product/CC2511) system-on-chip (SoC), which has an integrated 2.4 GHz radio transceiver. We can load [firmware](https://github.com/anzodev/cmtg/tree/master/wixel-sdk/apps/spectrum_analysis) to scan radio ether on different channels:
@@ -29,7 +30,7 @@ Otherwise, you should run monitoring system with **root permissions**.
 ## [Startup with docker](#startup-with-docker)
 
 This is the simplest way to run application:
-1. Install [docker](https://docs.docker.com/install/).
+1. Install [docker](https://docs.docker.com/install/) (don't forget to add the user to the `docker` group).
 2. Clone repository:
 ```bash
 $ git clone https://github.com/anzodev/cmtg.git
@@ -51,7 +52,6 @@ However, we recommend to use [pyenv](https://github.com/pyenv/pyenv) tool. It's 
 
 After the interpreter is installed, you have several ways to get [virtualenv](https://pypi.org/project/virtualenv/) tool:
 * With pyenv there is available [pyenv-virtualenv](https://github.com/pyenv/pyenv-virtualenv) plugin already. You don't need to install virtualenv.
-* There is [Pipfile](https://github.com/anzodev/cmtg/blob/master/Pipfile) file at project repository, so you can use [pipenv](https://docs.pipenv.org/en/latest/) tool (this alternative way, use it your own).
 * Use method, that is described in [docs](https://virtualenv.pypa.io/en/latest/installation/).
 
 
@@ -112,6 +112,7 @@ optional arguments:
 | `--port`  | int  | 5000      | The web service port.                                                                                                                                                                                     |
 | `--wxls`  | int  | 0         | The quantity of emulated Pololu Wixel connections. If you set emulated connections, the real module connection **will not recognize anymore** while app is running.                                       |
 
+
 ### [Run docker container](#run-docker-container)
 You can run docker container after the [docker image](#startup-with-docker) is built. There are two important options:
 1. The `/dev` volume is required, that the monitoring system works with dynamically plugged modules.
@@ -137,11 +138,6 @@ Firstly, you need to activate your virtual environment. After that, run the moni
 # and change host.
 (cmtg-venv)$ python -m cmtg --wxls 2 --host 127.0.0.1
 ```
-
-
-## [Todo](#todo)
-- [ ] To add the functional for neighbor cmtg app detection at the local network (common access point).
-- [ ] To add parameters for controlling intervals of some operations (e.g. search connected modules, read data from serial).
 
 
 ## [Authors](#authors)

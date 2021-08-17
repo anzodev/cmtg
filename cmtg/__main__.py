@@ -97,9 +97,8 @@ def app_exit(*args):
     exit()
 
 
-gevent.signal(signal.SIGTERM, app_exit)
-gevent.signal(signal.SIGINT, app_exit)
-
+gevent.signal_handler(signal.SIGTERM, app_exit)
+gevent.signal_handler(signal.SIGINT, app_exit)
 
 try:
     logger.info("WixelSessionMonitor start;")

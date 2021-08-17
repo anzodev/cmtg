@@ -91,7 +91,7 @@ def test_wixel_context_port_opening(make_wxl):
 
 
 def test_is_wixel_port():
-    port = ListPortInfo()
+    port = ListPortInfo("/dev/null")
     port.vid = 4321
     port.pid = 5678
     assert wixel.is_wixel_port(port) == False

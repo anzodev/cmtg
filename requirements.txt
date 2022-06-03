@@ -1,5 +1,5 @@
 attrs==21.2.0
-bottle==0.12.19
+bottle==0.12.20
 gevent==21.8.0
 greenlet==1.1.1
 importlib-metadata==4.6.4
